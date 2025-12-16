@@ -1,0 +1,1083 @@
+/* ===============================
+   Глобальний шрифт Montserrat
+   =============================== */
+* {
+    font-family: 'Montserrat', sans-serif !important;
+}
+
+/* ===============================
+   Фон сторінки (градієнт)
+   =============================== */
+html, body {
+    height: 100%;
+}
+
+body {
+    /* !important, щоб перебити body{background-color:#fff} з Bootstrap */
+    background: #010026 !important;
+    background: linear-gradient(135deg, #010026, #050544, #000016) !important;
+    min-height: 100vh;
+    color: white;
+    margin: 0;
+}
+
+/* ======================================================
+   1) ПРОЗОРИЙ ХЕДЕР + ПІГУЛКА ДЛЯ НАЗВИ САЙТУ
+   ====================================================== */
+
+.custom-navbar {
+    background: transparent !important;
+    box-shadow: none;
+    padding-top: 25px;
+}
+
+.brand-pill {
+    padding: 12px 35px;
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 1px;
+    text-decoration: none; /* важливо: прибирає підкреслення */
+
+    /* Glassmorphism */
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 
+        inset 0 0 10px rgba(255, 255, 255, 0.15),
+        0 8px 20px rgba(0, 0, 0, 0.25);
+
+    transition: 0.2s ease;
+}
+
+/* Поведінка кнопки при наведенні */
+.brand-pill:hover {
+    background: rgba(255, 255, 255, 0.22);
+    transform: translateY(-2px);
+    box-shadow:
+        inset 0 0 12px rgba(255, 255, 255, 0.2),
+        0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Клік */
+.brand-pill:active {
+    transform: scale(0.96);
+}
+
+/* Кружечки справа в хедері (аватар + logout) */
+.icon-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* той самий “скляний” фон, що й у Spendly */
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow:
+        inset 0 0 8px rgba(255, 255, 255, 0.15),
+        0 6px 18px rgba(0, 0, 0, 0.35);
+
+    color: #f8f9ff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-size: 22px;
+}
+
+/* Ховер на іконках в хедері */
+.icon-circle:hover {
+    background: rgba(255, 255, 255, 0.20);
+    transform: translateY(-1px);
+    box-shadow:
+        inset 0 0 10px rgba(255, 255, 255, 0.2),
+        0 8px 22px rgba(0, 0, 0, 0.4);
+}
+
+/* Можна трохи відрізняти logout кольором */
+.logout-circle {
+    color: #ffdddd;
+}
+.logout-circle:hover {
+    color: #ffffff;
+}
+
+
+/* ======================================================
+   2) ГОЛОВНА СТОРІНКА (index.html)
+   ====================================================== */
+
+.landing-container {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+/* Ліва частина з описом */
+.landing-left {
+    padding-left: 15px;
+}
+
+/* Заголовок — базово не жирний */
+.landing-title {
+    font-size: 50px;
+    font-weight: 400; /* звичайний */
+    line-height: 1.1;
+}
+
+/* Жирна частина */
+.landing-title .bold-part {
+    font-weight: 800; /* дуже жирний */
+    color: #ffffff;
+}
+
+
+.landing-title span {
+    color: #ffffff;
+}
+
+/* Опис тексту */
+.landing-text {
+    color: #ffffff;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+/* Список */
+/* ======================================================
+   2.1) ФІЧІ-ПИЛЬКИ (liquid glass) під описом
+   ====================================================== */
+
+.feature-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 28px;
+}
+
+/* базовий вигляд “скляної” плашки */
+.feature-pill {
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-size: 14px;
+    color: #f8f9ff;
+
+    /* glassmorphism */
+    background: rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow:
+        inset 0 0 8px rgba(255, 255, 255, 0.15),
+        0 6px 18px rgba(0, 0, 0, 0.35);
+
+    white-space: nowrap;
+}
+
+/* трохи ширша нижня плашка */
+.feature-pill-wide {
+    padding-inline: 26px;
+}
+
+/* Третя плашка — зсув праворуч */
+.feature-pill.feature-pill-wide {
+    margin-left: 120px; /* можна змінити на інший розмір */
+}
+
+
+/* легка анімація при наведенні */
+.feature-pill:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateY(-1px);
+    box-shadow:
+        inset 0 0 10px rgba(255, 255, 255, 0.18),
+        0 8px 22px rgba(0, 0, 0, 0.4);
+}
+
+/* на вузьких екранах плашки стають у стовпчик */
+@media (max-width: 768px) {
+    .feature-pills {
+        justify-content: center;
+    }
+    .feature-pill {
+        white-space: normal;
+        text-align: center;
+    }
+}
+
+
+/* ======================================================
+   3) ПРАВА ЧАСТИНА — LOGIN FORM
+   ====================================================== */
+
+.login-card {
+    background: white;
+    color: black;
+    border-radius: 25px;
+    padding: 35px;
+}
+
+.login-input {
+    background: #f7f7f7;
+    border: none;
+    height: 45px;
+    border-radius: 10px;
+}
+
+.login-btn {
+    background: black;
+    color: white;
+    height: 45px;
+    border-radius: 25px;
+    font-weight: 600;
+}
+
+.login-btn:hover {
+    background: #222;
+}
+
+
+
+/* ======================================================
+   АДАПТИВНІСТЬ
+   ====================================================== */
+
+@media (max-width: 992px) {
+    .landing-left {
+        text-align: center;
+        padding-left: 0;
+    }
+    .landing-title {
+        font-size: 36px;
+    }
+    .login-card {
+        margin-top: 30px;
+    }
+}
+
+/* --------- DASHBOARD (оновлений стиль з grid-areas) --------- */
+
+/* Тепер dash-board не є окремою "карткою" — просто відступи */
+.dash-board {
+    margin-top: 20px;
+}
+
+/* заголовок */
+.dash-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+/* сітка 3 "ряди": 
+   add | total
+   add | expense
+   chart | expense
+*/
+.dash-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.6fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+        "add total"
+        "add expense"
+        "chart expense";
+    column-gap: 24px;
+    row-gap: 24px;
+}
+
+/* базовий стиль карток */
+.dash-card {
+    border-radius: 24px;
+    padding: 18px 20px;
+}
+
+/* --- картки --- */
+
+/* Add an expense — яскравий блок, як у макеті */
+.add-card {
+    grid-area: add;
+    background: linear-gradient(135deg, #6ee7b7, #bef264);
+    box-shadow:
+        12px 12px 30px rgba(15, 23, 42, 0.7),
+        -6px -6px 20px rgba(190, 242, 100, 0.4);
+}
+
+/* клас для карток "рідке скло" */
+.glass-card {
+    background: linear-gradient(135deg,
+        rgba(148, 163, 184, 0.15),
+        rgba(79, 70, 229, 0.35)
+    );
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow:
+        0 18px 45px rgba(15, 23, 42, 0.65),
+        0 0 0 1px rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+/* Total spent — верхній правий блок */
+.total-card {
+    grid-area: total;
+}
+
+/* Expenses breakdown (нижній лівий блок) */
+.chart-card {
+    grid-area: chart;
+}
+
+/* My expense (праворуч, відразу під Total і донизу, як на макеті) */
+.expense-card {
+    grid-area: expense;
+    display: flex;
+    flex-direction: column;
+}
+
+/* спільні заголовки */
+.add-card h2,
+.total-card h2,
+.chart-card h2,
+.expense-card h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+/* --------- форма Add an expense --------- */
+
+.add-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.field label {
+    font-size: 12px;
+    margin-bottom: 3px;
+    color: #000000;
+}
+
+/* Стиль контейнера двох полів */
+.field-row {
+    display: flex;
+    gap: 18px;
+    width: 100%;
+}
+
+/* Обидва поля займають повну ширину */
+.field-row .field {
+    flex: 1;
+}
+
+/* Стиль інпутів */
+.field input,
+.field select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.75);
+}
+
+.btn-save {
+    margin-top: 8px;
+    border: none;
+    border-radius: 999px;
+    background: #020617;
+    color: #f9fafb;
+    font-weight: 600;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+/* ---------- Inline AI Helper (beautiful) ---------- */
+
+.ai-helper-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.25);
+    padding: 14px 18px;
+    border-radius: 18px;
+    margin: 10px 0 20px 0;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.ai-helper-info {
+    display: flex;
+    flex-direction: column;
+    color: #0f172a;
+    font-size: 14px;
+    line-height: 1.3;
+}
+
+.ai-helper-info strong {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.ai-helper-info span {
+    font-size: 13px;
+    color: #252424;
+}
+
+/* Button */
+.ai-helper-button {
+    background: linear-gradient(135deg, #ff3131, #ff914d);
+    color: #ffffff;
+    font-weight: 600;
+    padding: 10px 50px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(34, 197, 94, 0.35);
+    font-size: 14px;
+    transition: 0.2s ease;
+    white-space: nowrap;
+}
+
+.ai-helper-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(34, 197, 94, 0.5);
+}
+
+.ai-helper-button:active {
+    transform: scale(0.97);
+}
+
+
+/* --------- Total spent --------- */
+
+.total-card {
+    text-align: right;   /* вирівнюємо ТІЛЬКИ число вправо */
+}
+
+.total-card h2 {
+    text-align: left;    /* залишаємо заголовок зліва */
+    margin-bottom: 10px;
+}
+
+.total-badge {
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    border-radius: 999px;
+    background: radial-gradient(circle at top left, #f973ff, #a855f7);
+    font-size: 40px;
+    font-weight: 700;
+    color: #fefce8;
+}
+
+.total-currency {
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 6px;
+    opacity: 0.9;
+    position: relative;
+    top: -6px;          /* головне — піднімає текст */
+}
+
+
+
+
+/* --------- Chart --------- */
+
+.chart-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+/* збільшена діаграма */
+.chart-wrapper canvas {
+    width: 320px !important;
+    height: 320px !important;
+    margin-left: 20px; 
+    margin-top: 20px; 
+    margin-bottom: 10px; 
+}
+
+/* легенда в два стовпчики */
+.chart-legend {
+    display: flex;
+    gap: 38px;
+}
+
+.legend-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.legend-bar {
+    width: 5px;
+    height: 20px;
+    border-radius: 999px;
+}
+
+
+/* кольори ті ж, що й для секторів діаграми */
+.color-1 { background: #FACC15; }  /* жовтий */
+.color-2 { background: #f63bd7; }  /* синій */
+.color-3 { background: #A855F7; }  /* рожевий */
+.color-4 { background: #b1ff33; }
+.color-5 { background: #ff4921; }
+.color-6 { background: #FB923C; }
+.color-7 { background: #00ff8c; }
+.color-8 { background: #35e7ff; }
+
+.legend-text {
+    display: flex;
+    gap: 6px;
+}
+
+.legend-label {
+    font-weight: 500;
+}
+
+.legend-percent {
+    font-weight: 700;
+    color: #f9fafb;
+}
+
+
+/* --------- My expense --------- */
+
+.expense-day-block {
+    margin-top: 8px;
+}
+
+.expense-day {
+    font-size: 11px;
+    color: #e5e7eb;
+    margin-bottom: 4px;
+}
+
+.expense-row {
+    display: flex;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.88);
+    border-radius: 14px;
+    padding: 6px 10px;
+    margin-bottom: 6px;
+}
+
+.expense-color-bar {
+    width: 6px;
+    height: 28px;
+    border-radius: 999px;
+    margin-right: 8px;
+}
+
+/* кольори категорій */
+/* category colors (English names) */
+.food          { background: #FACC15; } /* yellow */
+.transport     { background: #f63bd7; } /* blue */
+.shopping      { background: #A855F7; } /* purple */
+.home          { background: #b1ff33; } /* green */
+.entertainment { background: #ff4921; } /* pink */
+.health        { background: #FB923C; } /* orange */
+.education     { background: #00ff8c; } /* cyan */
+.other         { background: #35e7ff; } /* gray */
+
+
+.expense-main {
+    flex: 1;
+}
+
+.expense-category {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.expense-desc {
+    font-size: 11px;
+    color: #c7d2fe;
+}
+
+.expense-amount {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* загальний текст "немає даних" */
+.empty-text {
+    font-size: 13px;
+    color: #e5e7eb;
+    opacity: 0.8;
+}
+
+/* адаптив */
+@media (max-width: 900px) {
+    .dash-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-template-areas:
+            "add"
+            "total"
+            "expense"
+            "chart";
+    }
+
+    .add-card,
+    .total-card,
+    .chart-card,
+    .expense-card {
+        grid-column: 1 / -1;
+    }
+
+    .chart-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* ---------- AI modal (brand style) ---------- */
+
+.ai-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 4, 24, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.ai-modal-backdrop.open {
+    display: flex;
+}
+
+/* “картка” модалки – біла, але з неоновою рамкою й м’якою тінню */
+.ai-modal {
+    width: min(520px, 92vw);
+    border-radius: 32px;
+    padding: 28px 32px 26px;
+
+    /* скляна рамка в кольорах сайту */
+    background:
+        linear-gradient(#ffffff, #ffffff) padding-box,
+        linear-gradient(135deg, #34d399, #a855f7) border-box;
+    border: 1px solid transparent;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.55),
+        0 0 60px rgba(52, 211, 153, 0.15);
+    color: #020617;
+}
+
+/* ------- Header ------- */
+
+.ai-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+/* градієнтний заголовок як брендова назва */
+.ai-modal-header h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #a3e635, #22d3ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.ai-modal-close {
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    color: #94a3b8;
+    transition: 0.18s ease;
+}
+.ai-modal-close:hover {
+    color: #0f172a;
+    transform: scale(1.05);
+}
+
+/* ------- Текст / textarea ------- */
+
+.ai-modal-text {
+    font-size: 15px;
+    margin-bottom: 16px;
+    color: #111827;
+}
+
+.ai-modal-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+.ai-modal-textarea {
+    width: 100%;
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    padding: 12px 14px;
+    font-size: 15px;
+    resize: vertical;
+    min-height: 90px;
+    background: #f9fafb;
+    color: #020617;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.12);
+    transition: 0.18s ease;
+}
+.ai-modal-textarea:focus {
+    outline: none;
+    border-color: #34d399;
+    background: #ffffff;
+    box-shadow:
+        0 0 0 1px rgba(52, 211, 153, 0.3),
+        0 0 0 8px rgba(52, 211, 153, 0.06);
+}
+
+/* ------- Результат ------- */
+
+.ai-modal-result {
+    margin-top: 16px;
+    font-size: 15px;
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+    color: #111827;
+}
+
+.ai-modal-result strong {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fb923c; /* помаранч як в дашборді */
+}
+
+/* ------- Кнопки ------- */
+
+.ai-modal-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.ai-modal-btn {
+    border-radius: 999px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s ease;
+    white-space: nowrap;
+}
+
+/* Ask AI – неоновий зелений, як “Save” */
+.ai-modal-btn.primary {
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    color: #022c22;
+    box-shadow: 0 10px 25px rgba(34, 197, 94, 0.45);
+}
+.ai-modal-btn.primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 30px rgba(34, 197, 94, 0.55);
+}
+
+/* Use this category – темний “таблет” як верхній навбар */
+.ai-modal-btn.secondary {
+    background: #020617;
+    color: #f9fafb;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.55);
+}
+.ai-modal-btn.secondary:hover {
+    background: #02081f;
+    transform: translateY(-1px);
+}
+
+/* Cancel – світла “скляна” кнопка */
+.ai-modal-btn.ghost {
+    background: #e5e7eb;
+    color: #4b5563;
+}
+.ai-modal-btn.ghost:hover {
+    background: #d1d5db;
+}
+
+.ai-modal-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+    box-shadow: none;
+}
+/* ---- Центрування результату ---- */
+.centered-result {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    min-height: 20px;
+}
+
+/* Текст "Asking AI..." */
+.ai-loading-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: #64748b;
+    animation: pulse 1.4s infinite ease-in-out;
+}
+
+/* Плавне "дихання" */
+@keyframes pulse {
+    0%   { opacity: 0.4; }
+    50%  { opacity: 1; }
+    100% { opacity: 0.4; }
+}
+
+/* Стиль готової відповіді */
+.ai-suggested {
+    font-size: 16px;
+    margin-top: 10px;
+    color: #111827;
+}
+
+.ai-suggested strong {
+    color: #fb923c;
+    font-weight: 700;
+}
+
+/* =========================================================
+   MODEL REPORT PAGE — FULL STYLES
+   ========================================================= */
+
+.model-report {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 16px 36px;
+}
+
+/* ---------------- Header ---------------- */
+
+.model-report .dash-head {
+  margin-bottom: 28px;
+}
+
+.model-report .dash-title {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+.model-report .dash-subtitle {
+  margin-top: 8px;
+  opacity: .8;
+  font-size: 15px;
+}
+
+/* ---------------- Top grid ---------------- */
+
+.model-report .dash-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;                 /* space between text & metrics */
+  align-items: stretch;
+}
+
+@media (max-width: 980px) {
+  .model-report .dash-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------- Cards ---------------- */
+
+.model-report .dash-card {
+  border-radius: 24px;
+  padding: 22px 22px 24px;
+}
+
+.model-report .glass-card {
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.08),
+    rgba(255,255,255,0.03)
+  );
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 24px 70px rgba(0,0,0,.35);
+}
+
+/* ---------------- Card head ---------------- */
+
+.model-report .card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.model-report .card-head h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.model-report .pill {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  opacity: .9;
+}
+
+/* ---------------- Text helpers ---------------- */
+
+.model-report p {
+  line-height: 1.55;
+}
+
+.model-report .muted {
+  opacity: .82;
+}
+
+.model-report .note {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* ---------------- Metrics table ---------------- */
+
+.model-report .metrics-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.model-report .metrics-table th,
+.model-report .metrics-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+
+.model-report .metrics-table th {
+  text-align: left;
+  font-weight: 600;
+  opacity: .85;
+}
+
+.model-report .metrics-table td {
+  opacity: .95;
+}
+
+.model-report .mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+               "Liberation Mono", "Courier New", monospace;
+  font-size: 12.5px;
+}
+
+/* ---------------- Mini stats ---------------- */
+
+.model-report .mini-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 980px) {
+  .model-report .mini-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.model-report .mini-stat {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+
+.model-report .mini-label {
+  font-size: 12px;
+  opacity: .8;
+  margin-bottom: 6px;
+}
+
+.model-report .mini-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   CHARTS SECTION
+   ========================================================= */
+
+.model-report .charts-stack {
+  margin-top: 32px;          /* distance from top cards */
+  display: flex;
+  flex-direction: column;
+  gap: 32px;                 /* 🔥 SPACE BETWEEN GRAPHS */
+}
+
+/* Chart card */
+.model-report .chart-card {
+  padding: 22px 22px 26px;
+}
+
+/* Chart wrapper */
+.model-report .chart-wrap {
+  margin-top: 14px;
+  height: 360px;             /* stable chart height */
+  padding: 14px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+/* Canvas */
+.model-report .chart-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Chart footer */
+.model-report .chart-foot {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  opacity: .75;
+}
+.model-report .charts-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 48px; /* ← ЗБІЛЬШ ВІДСТАНЬ ТУТ */
+}
+

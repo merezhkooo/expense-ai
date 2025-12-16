@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard — spendly{% endblock %}
+
+{% block content %}
+<div class="dash-board">
+
+  <h1 class="dash-title">My Dashboard</h1>
+
+  <div class="dash-grid">
+    <!-- 1. Add an expense -->
+    <section class="dash-card add-card">
+      <h2>Add an expense</h2>
+
+      <form method="post" action="{{ url_for('dashboard') }}" class="add-form" id="add-expense-form">
+        <div class="field">
+          <label>amount (UAH)</label>
+          <input type="number" step="0.01" name="amount" required>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>category</label>
+            <select name="category" required id="category-select">
+              <option value="" disabled selected>Choose category</option>
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Home">Home</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Health">Health</option>
+              <option value="Education">Education</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>date</label>
+            <input type="date" name="date" required>
+          </div>
+        </div>
+
+        <!-- inline AI helper під category -->
+        <div class="ai-helper-inline">
+          <div class="ai-helper-info">
+            <strong>AI category helper</strong>
+            <span>Enter a short description and AI will suggest the best category</span>
+          </div>
+          <button type="button" class="ai-helper-button" id="open-ai-helper">Ask AI</button>
+        </div>
+
+        <div class="field">
+          <label>description (optional)</label>
+          <input type="text"
+                 name="description"
+                 id="description-input"
+                 placeholder="Lunch, taxi, cinema...">
+        </div>
+
+        <button type="submit" class="btn-save">Save</button>
+      </form>
+    </section>
+
+    <!-- 2. Total spent -->
+    <section class="dash-card total-card glass-card">
+      <h2>Total spent</h2>
+      <div class="total-badge">
+        {{ "%.2f"|format(total) }} <span class="total-currency">UAH</span>
+      </div>
+    </section>
+
+    <!-- 3. Expenses breakdown by category -->
+    <section class="dash-card chart-card glass-card">
+      <h2>Expenses breakdown by category</h2>
+
+      {% if category_breakdown %}
+        <div class="chart-wrapper">
+          <canvas id="categoryChart"></canvas>
+
+          <div class="chart-legend">
+            {% set half = (category_breakdown|length + 1) // 2 %}
+
+            <div class="legend-col">
+              {% for item in category_breakdown[:half] %}
+                <div class="legend-item">
+                  <span class="legend-bar color-{{ loop.index }}"></span>
+                  <span class="legend-text">
+                    <span class="legend-label">{{ item.name }}</span>
+                    <span class="legend-percent">{{ item.percent }}%</span>
+                  </span>
+                </div>
+              {% endfor %}
+            </div>
+
+            <div class="legend-col">
+              {% for item in category_breakdown[half:] %}
+                <div class="legend-item">
+                  <span class="legend-bar color-{{ loop.index + half }}"></span>
+                  <span class="legend-text">
+                    <span class="legend-label">{{ item.name }}</span>
+                    <span class="legend-percent">{{ item.percent }}%</span>
+                  </span>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <p class="empty-text">No data for chart yet.</p>
+      {% endif %}
+    </section>
+
+    <!-- 4. My expense list -->
+    <section class="dash-card expense-card glass-card">
+      <h2>My expense</h2>
+
+      {% if expenses %}
+        {% for day, items in expenses|groupby('date_display') %}
+          <div class="expense-day-block">
+            <div class="expense-day">{{ day }}</div>
+
+            {% for e in items %}
+              <div class="expense-row">
+                <div class="expense-color-bar {{ e.category|lower|replace(' ', '-') }}"></div>
+                <div class="expense-main">
+                  <div class="expense-category">{{ e.category }}</div>
+                  <div class="expense-desc">
+                    {{ e.description if e.description else "no description" }}
+                  </div>
+                </div>
+                <div class="expense-amount">
+                  -{{ "%.2f"|format(e.amount) }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="empty-text">No expenses yet. Add the first one in the left block.</p>
+      {% endif %}
+    </section>
+  </div>
+</div>
+
+<!-- ========= MODAL для AI helper ========= -->
+<div class="ai-modal-backdrop" id="ai-modal">
+  <div class="ai-modal">
+    <div class="ai-modal-header">
+      <h3>AI category helper</h3>
+      <button type="button" class="ai-modal-close" id="ai-close-btn">&times;</button>
+    </div>
+
+    <p class="ai-modal-text">
+      Enter the expense description and AI will suggest the best category.
+    </p>
+
+    <label class="ai-modal-label">description for AI</label>
+    <textarea id="ai-description-input"
+              class="ai-modal-textarea"
+              placeholder="Lunch at McDonald's, Taxi to university..."
+              rows="3"></textarea>
+
+    <!-- Центрована зона: тут спочатку “Asking AI…”, потім Suggested category -->
+    <div id="ai-result" class="centered-result" hidden></div>
+
+    <!-- Для помилок -->
+    <div class="ai-modal-status" id="ai-status" hidden></div>
+
+    <div class="ai-modal-actions">
+      <button type="button" class="ai-modal-btn primary" id="ai-run-btn">Ask AI</button>
+      <button type="button" class="ai-modal-btn secondary" id="ai-apply-btn" disabled>Use this category</button>
+      <button type="button" class="ai-modal-btn ghost" id="ai-cancel-btn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ------- Chart JS (тільки якщо є дані) ------- -->
+{% if category_breakdown %}
+  <script id="chart-data" type="application/json">
+    {{ category_breakdown|tojson }}
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const raw = document.getElementById('chart-data').textContent.trim();
+      let data = [];
+      try { data = JSON.parse(raw || '[]'); } catch (e) { console.error('Chart data parse error', e); }
+
+      const labels = data.map(d => d.name);
+      const values = data.map(d => d.value);
+
+      if (labels.length) {
+        const ctx = document.getElementById('categoryChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: values,
+              backgroundColor: [
+                '#FACC15',
+                '#f63bd7',
+                '#A855F7',
+                '#b1ff33',
+                '#ff4921',
+                '#FB923C',
+                '#00ff8c',
+                '#35e7ff'
+              ],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            cutout: '60%',
+            plugins: { legend: { display: false } }
+          }
+        });
+      }
+    });
+  </script>
+{% endif %}
+
+<!-- ------- JS для AI-модалки ------- -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const openBtn   = document.getElementById("open-ai-helper");
+    const modal     = document.getElementById("ai-modal");
+    const closeBtn  = document.getElementById("ai-close-btn");
+    const cancelBtn = document.getElementById("ai-cancel-btn");
+    const runBtn    = document.getElementById("ai-run-btn");
+    const applyBtn  = document.getElementById("ai-apply-btn");
+
+    const descTextarea = document.getElementById("ai-description-input");
+    const statusBox    = document.getElementById("ai-status");
+    const resultBox    = document.getElementById("ai-result");
+    const mainCategorySelect   = document.getElementById("category-select");
+    const mainDescriptionInput = document.getElementById("description-input");
+
+    let lastSuggestedCategory = null;
+
+    function openModal() {
+      modal.classList.add("open");
+      statusBox.hidden = true;
+      statusBox.textContent = "";
+      resultBox.hidden = true;
+      resultBox.innerHTML = "";
+      applyBtn.disabled = true;
+      lastSuggestedCategory = null;
+
+      descTextarea.value = mainDescriptionInput.value.trim() || "";
+      descTextarea.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove("open");
+    }
+
+    openBtn?.addEventListener("click", openModal);
+    closeBtn?.addEventListener("click", closeModal);
+    cancelBtn?.addEventListener("click", closeModal);
+
+    modal?.addEventListener("click", function (e) {
+      if (e.target === modal) closeModal();
+    });
+
+    runBtn?.addEventListener("click", async function () {
+      const text = descTextarea.value.trim();
+      if (!text) {
+        statusBox.textContent = "Please enter a description first.";
+        statusBox.className = "ai-modal-status error";
+        statusBox.hidden = false;
+        resultBox.hidden = true;
+        resultBox.innerHTML = "";
+        applyBtn.disabled = true;
+        return;
+      }
+
+      resultBox.hidden = false;
+      resultBox.innerHTML = '<span class="ai-loading-text">Asking AI...</span>';
+      statusBox.hidden = true;
+      statusBox.textContent = "";
+      applyBtn.disabled = true;
+      lastSuggestedCategory = null;
+
+      try {
+        const response = await fetch("{{ url_for('ai_suggest_category') }}", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ description: text })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || data.error) {
+          console.error("AI error:", data);
+          resultBox.hidden = true;
+          resultBox.innerHTML = "";
+          statusBox.textContent = "Could not get a suggestion from AI. Try again later.";
+          statusBox.className = "ai-modal-status error";
+          statusBox.hidden = false;
+          applyBtn.disabled = true;
+          return;
+        }
+
+        const cat = (typeof data.category === "string") ? data.category.trim() : "";
+        if (!cat) {
+          console.error("Unexpected AI response:", data);
+          resultBox.hidden = true;
+          resultBox.innerHTML = "";
+          statusBox.textContent = "AI returned an unexpected response.";
+          statusBox.className = "ai-modal-status error";
+          statusBox.hidden = false;
+          applyBtn.disabled = true;
+          return;
+        }
+
+        lastSuggestedCategory = cat;
+
+        const conf = (typeof data.confidence === "number")
+          ? ` <span style="opacity:.7;">(${Math.round(data.confidence * 100)}%)</span>`
+          : "";
+
+        resultBox.hidden = false;
+        resultBox.innerHTML =
+          `<div class="ai-suggested">Suggested category: <strong>${cat}</strong>${conf}</div>`;
+
+        statusBox.hidden = true;
+        statusBox.textContent = "";
+        applyBtn.disabled = false;
+
+      } catch (err) {
+        console.error(err);
+        resultBox.hidden = true;
+        resultBox.innerHTML = "";
+        statusBox.textContent = "Network error. Please try again.";
+        statusBox.className = "ai-modal-status error";
+        statusBox.hidden = false;
+        applyBtn.disabled = true;
+      }
+    });
+
+    applyBtn?.addEventListener("click", function () {
+      if (!lastSuggestedCategory) return;
+
+      const text = descTextarea.value.trim();
+      if (text) mainDescriptionInput.value = text;
+
+      const options = Array.from(mainCategorySelect.options);
+      const match = options.find(opt => opt.value.toLowerCase() === lastSuggestedCategory.toLowerCase());
+
+      if (match) mainCategorySelect.value = match.value;
+      else {
+        const other = options.find(opt => opt.value === "Other");
+        if (other) mainCategorySelect.value = "Other";
+      }
+
+      closeModal();
+    });
+  });
+</script>
+
+{% endblock %}

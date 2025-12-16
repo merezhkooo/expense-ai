@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block title %}Model Report — Spendly{% endblock %}
+
+{% block content %}
+<div class="dash-board model-report">
+
+  <!-- HEADER -->
+  <header class="dash-head">
+    <div>
+      <h1 class="dash-title">Model Report</h1>
+      <p class="dash-subtitle">Visualization of AI model training results</p>
+    </div>
+  </header>
+
+  <div class="dash-grid">
+
+    <!-- ================= TEXT REPORT ================= -->
+<section class="dash-card glass-card">
+  <div class="card-head">
+    <h2>Text report</h2>
+    <span class="pill">AI module</span>
+  </div>
+
+  <p><b>Обрана задача модуля ШІ:</b> класифікація текстів.</p>
+  <p class="muted" style="margin-top:6px;">
+    Модуль ШІ виконує автоматичне визначення категорії витрати за її коротким текстовим описом
+    (наприклад: “pizza delivery” → Food, “taxi” → Transport).
+  </p>
+
+  <p style="margin-top:10px;">
+    <b>Набір даних:</b>
+    {{ metrics.dataset_size }} зразків (train {{ metrics.train_size }}, test {{ metrics.test_size }})
+  </p>
+
+  <p><b>Кількість епох навчання:</b> {{ history|length }}</p>
+
+  <p><b>Найкраща точність (Accuracy):</b> {{ (metrics.best_accuracy * 100) | round(2) }}%</p>
+  <p><b>Найкраще значення F1 macro:</b> {{ (metrics.best_f1_macro * 100) | round(2) }}%</p>
+
+  <p class="muted" style="margin-top:10px;">
+    {{ summary }}
+  </p>
+</section>
+
+
+    <!-- ================= CHARTS ================= -->
+    <section class="dash-card glass-card">
+      <div class="card-head">
+        <h2>Charts</h2>
+        <span class="pill">diagrams</span>
+      </div>
+
+      <!-- 1) Accuracy + F1 Macro -->
+      <div style="
+        padding:12px;
+        border-radius:14px;
+        border:1px solid rgba(255,255,255,.12);
+        background: rgba(0,0,0,.12);
+        height:320px;
+      ">
+        <h3 style="margin:0 0 10px; font-size:14px; opacity:.9;">
+          Evaluation metrics during training
+        </h3>
+        <canvas id="metricsChart"></canvas>
+      </div>
+
+      <!-- 2) Training Loss over steps -->
+      <div style="
+        margin-top:18px;
+        padding:12px;
+        border-radius:14px;
+        border:1px solid rgba(255,255,255,.12);
+        background: rgba(0,0,0,.12);
+        height:300px;
+      ">
+        <h3 style="margin:0 0 10px; font-size:14px; opacity:.9;">
+          Training loss over steps
+        </h3>
+        <canvas id="lossChart"></canvas>
+      </div>
+    </section>
+
+    <!-- ================= TABLE ================= -->
+    <section class="dash-card glass-card" style="grid-column:1 / -1;">
+      <div class="card-head">
+        <h2>Training log</h2>
+        <span class="pill">table</span>
+      </div>
+
+      <div style="overflow:auto; border-radius:14px; border:1px solid rgba(255,255,255,.12);">
+        <table style="width:100%; border-collapse:collapse; min-width:720px;">
+          <thead>
+            <tr style="background: rgba(0,0,0,.18);">
+              <th style="padding:12px; text-align:left;">Epoch</th>
+              <th style="padding:12px; text-align:left;">Training Loss</th>
+              <th style="padding:12px; text-align:left;">Validation Loss</th>
+              <th style="padding:12px; text-align:left;">Accuracy</th>
+              <th style="padding:12px; text-align:left;">F1 Macro</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in history %}
+            <tr style="border-bottom:1px solid rgba(255,255,255,.10);">
+              <td style="padding:12px;">{{ row.epoch }}</td>
+              <td style="padding:12px;">{{ row.train_loss if row.train_loss is not none else "No log" }}</td>
+              <td style="padding:12px;">{{ row.val_loss | round(6) }}</td>
+              <td style="padding:12px;">{{ (row.accuracy * 100) | round(2) }}%</td>
+              <td style="padding:12px;"><b>{{ (row.f1_macro * 100) | round(2) }}%</b></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- ================= CHART.JS ================= -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- JSON data (so VS Code doesn't complain about Jinja inside JS) -->
+<script id="training-history-data" type="application/json">
+  {{ history | tojson }}
+</script>
+
+<!-- Training loss data (manual, like your screenshot). You can edit values anytime -->
+<script id="training-loss-data" type="application/json">
+{
+  "steps": [20, 40],
+  "loss":  [1.9714, 1.5316]
+}
+</script>
+
+<script>
+  // ====== 1) Accuracy + F1 Macro (epochs) ======
+  const trainingHistory = JSON.parse(
+    document.getElementById("training-history-data").textContent
+  );
+
+  const epochs = trainingHistory.map(r => r.epoch);
+  const accuracy = trainingHistory.map(r => r.accuracy);
+  const f1macro = trainingHistory.map(r => r.f1_macro);
+
+  new Chart(document.getElementById('metricsChart'), {
+    type: 'line',
+    data: {
+      labels: epochs,
+      datasets: [
+        { label: 'Eval Accuracy', data: accuracy, tension: 0.3 },
+        { label: 'Eval F1 Macro', data: f1macro, tension: 0.3 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: { padding: { bottom: 18 } },
+      scales: {
+        x: {
+          offset: true,
+          title: { display: true, text: 'Epoch' },
+          ticks: { padding: 12 }
+        },
+        y: {
+          beginAtZero: true,
+          max: 1,
+          title: { display: true, text: 'Score' }
+        }
+      }
+    }
+  });
+
+  // ====== 2) Training Loss (steps) ======
+  const lossData = JSON.parse(
+    document.getElementById("training-loss-data").textContent
+  );
+
+  new Chart(document.getElementById('lossChart'), {
+    type: 'line',
+    data: {
+      labels: lossData.steps,
+      datasets: [
+        { label: 'Training Loss', data: lossData.loss, tension: 0.3 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: { padding: { bottom: 18 } },
+      scales: {
+        x: {
+          title: { display: true, text: 'Step' },
+          ticks: { padding: 12 }
+        },
+        y: {
+          title: { display: true, text: 'Loss' }
+        }
+      }
+    }
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Spendly — Control your expenses{% endblock %}
+
+{% block content %}
+<div class="row align-items-center landing-container">
+
+  <!-- ОПИС ЗАСТОСУНКУ — ліворуч -->
+  <div class="col-lg-6 text-white landing-left">
+    <h1 class="landing-title">
+    Control 
+    <strong class="bold-part">your<br>expenses</strong>
+    online
+</h1>
+
+
+    <p class="mt-4 landing-text">
+      <strong>SPENDLY</strong> is a web application for convenient tracking of everyday expenses.
+      Here you can add expenses by different categories, view purchase history,
+      and analyze your total expenses.
+    </p>
+
+    <p class="landing-text">
+      This helps you better plan your budget and see what you spend the most money on.
+    </p>
+
+   <div class="feature-pills">
+  <div class="feature-pill">
+    <strong>storage of expenses by date and category</strong>
+  </div>
+  <div class="feature-pill">
+    <strong>simple and clear interface</strong>
+  </div>
+  <div class="feature-pill feature-pill-wide">
+    <strong>automatic calculation of the total amount</strong>
+  </div>
+</div>
+
+  </div>
+
+  <!-- ФОРМА ВХОДУ — праворуч -->
+  <div class="col-lg-5 offset-lg-1">
+    <div class="login-card shadow-lg">
+      <h3 class="text-center mb-4">Login</h3>
+
+      <form method="post" action="{{ url_for('login') }}">
+        <label class="form-label">email</label>
+        <input type="email" name="email" class="form-control mb-3 login-input">
+
+        <label class="form-label">password</label>
+        <input type="password" name="password" class="form-control mb-4 login-input">
+
+        <button class="btn login-btn w-100">Login</button>
+      </form>
+
+      <p class="text-center mt-3">
+        Don't have an account?
+        <a href="{{ url_for('register') }}">Register</a>
+      </p>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
