@@ -21,3 +21,7 @@ based on text description.
 ## Purpose
 Educational project for the course "Information Technologies of Cloud Computing".
 
+## Team workflow
+This project uses GitHub branches and pull requests
+to organize collaborative development and code review.
+
